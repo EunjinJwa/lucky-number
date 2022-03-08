@@ -1,8 +1,9 @@
 package jinny.toy.luckynumber.service;
 
 import jinny.toy.luckynumber.data.LottoMemoryData;
-import jinny.toy.luckynumber.rest.LotteryRestTemplate;
-import jinny.toy.luckynumber.struct.LottoNumber;
+import jinny.toy.luckynumber.rest.LotteryRest;
+import jinny.toy.luckynumber.struct.dto.LottoNumberDto;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -11,20 +12,23 @@ import java.util.List;
 public class LottoService {
 
     private LottoMemoryData lottoMemoryData;
+    private LotteryRest lotteryRest;
 
-    public LottoService(LottoMemoryData lottoMemoryData) {
+    @Autowired
+    public LottoService(LottoMemoryData lottoMemoryData, LotteryRest lotteryRest) {
         this.lottoMemoryData = lottoMemoryData;
+        this.lotteryRest = lotteryRest;
     }
 
-    public LottoNumber getLottoNumber(int drwNo) {
-        return LotteryRestTemplate.getLotteryNumber(drwNo);
+    public LottoNumberDto getLottoNumber(int drwNo) {
+        return lotteryRest.getLotteryNumber(drwNo);
     }
 
-    public List<LottoNumber> loadLottoNumbers(int from, int to) {
+    public List<LottoNumberDto> loadLottoNumbers(int from, int to) {
 
         for (int drwNo = from; drwNo <= to; drwNo++) {
             lottoMemoryData.addLottoNumbers(getLottoNumber(drwNo));
         }
-        return lottoMemoryData.getLottoNumbers();
+        return lottoMemoryData.getLottoNumberDtos();
     }
 }

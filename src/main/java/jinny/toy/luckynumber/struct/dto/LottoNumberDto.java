@@ -1,9 +1,9 @@
-package jinny.toy.luckynumber.struct;
+package jinny.toy.luckynumber.struct.dto;
 
 import lombok.Data;
 
 @Data
-public class LottoNumber {
+public class LottoNumberDto {
 
     private long totSellamnt;
     private String returnValue;
