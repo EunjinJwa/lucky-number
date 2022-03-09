@@ -12,4 +12,10 @@ public class NumberCount {
         this.number = number;
         this.count = count;
     }
+
+    public enum CountLevel {
+        HIGH,
+        MIDDLE,
+        LOW
+    }
 }

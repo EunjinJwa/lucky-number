@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Component
 public class LottoMemoryData {
@@ -14,6 +15,7 @@ public class LottoMemoryData {
     private List<LottoNumberDto> lottoNumberDtos;
     private List<LottoNumber> lottoNumbers;
     private List<NumberCount> numberCounts;
+    private Map<NumberCount.CountLevel, List<NumberCount>> numberCountsByLevel;
 
     public void addLottoNumbers(LottoNumberDto obj) {
         if (lottoNumberDtos == null)
@@ -40,5 +42,13 @@ public class LottoMemoryData {
 
     public List<LottoNumber> getLottoNumbers() {
         return lottoNumbers;
+    }
+
+    public Map<NumberCount.CountLevel, List<NumberCount>> getNumberCountsByLevel() {
+        return numberCountsByLevel;
+    }
+
+    public void setNumberCountsByLevel(Map<NumberCount.CountLevel, List<NumberCount>> numberCountsByLevel) {
+        this.numberCountsByLevel = numberCountsByLevel;
     }
 }

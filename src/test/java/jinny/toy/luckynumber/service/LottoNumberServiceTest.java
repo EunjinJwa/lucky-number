@@ -11,12 +11,12 @@ import org.junit.jupiter.api.Test;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.*;
+import java.util.function.BiFunction;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
-import java.util.stream.Stream;
 
-public class LottoNumberGeneratorServiceTest {
+public class LottoNumberServiceTest {
 
     private LottoMemoryData lottoMemoryData;
 
@@ -48,7 +48,7 @@ public class LottoNumberGeneratorServiceTest {
     @Test
     @DisplayName("무작위 랜덤 숫자 6개")
     public void randomNumber() {
-        int[] numbers = LottoNumberGeneratorService.genRandomNumbers();
+        int[] numbers = LottoNumberService.genRandomNumbers();
         Supplier<Boolean> numberRange = () -> IntStream.of(numbers).anyMatch(i -> i < 0 || i > 46);
         Supplier<Long> numberCount = () -> IntStream.of(numbers).distinct().count();
 
@@ -67,6 +67,41 @@ public class LottoNumberGeneratorServiceTest {
                 .toArray();
 
         System.out.println("topNumberArr = " + Arrays.toString(topNumbers));
+    }
+
+    @Test
+    void getLowLuckNumbers() {
+        int[] lowNumbers = lottoMemoryData.getNumberCounts()
+                .stream()
+                .sorted(Comparator.comparing(NumberCount::getCount))
+                .limit(10)
+                .mapToInt(NumberCount::getNumber)
+                .toArray();
+        System.out.println(Arrays.toString(lowNumbers));
+    }
+
+    @Test
+    void getCountAverage() {
+        IntSummaryStatistics countSummaryStatistics = lottoMemoryData.getNumberCounts()
+                .stream()
+                .mapToInt(NumberCount::getCount)
+                .summaryStatistics();
+
+        System.out.println("총 횟수 : " + countSummaryStatistics.getCount());
+        System.out.println("max 당첨 횟수 : " + countSummaryStatistics.getMax());
+        System.out.println("min 당첨 횟수 : " + countSummaryStatistics.getMin());
+        System.out.println("평균 당첨 횟수 : " + Math.round(countSummaryStatistics.getAverage()));
+
+        BiFunction<Integer, Long, NumberCount.CountLevel> countLevel = (count, average) ->
+                count > (average + 1) ? NumberCount.CountLevel.HIGH : count < (average - 1) ? NumberCount.CountLevel.LOW : NumberCount.CountLevel.MIDDLE;
+
+
+        Map<NumberCount.CountLevel, List<NumberCount>> numberCountsByLevel = lottoMemoryData.getNumberCounts()
+                .stream()
+                .collect(Collectors.groupingBy(s -> countLevel.apply(s.getCount(), Math.round(countSummaryStatistics.getAverage()))));
+
+        System.out.println(numberCountsByLevel);
+
     }
 
 }

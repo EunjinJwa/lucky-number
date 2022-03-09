@@ -34,4 +34,9 @@ public class LottoController {
         return lottoService.loadLottoNumbers(from, to);
     }
 
+    @GetMapping(value = "/generate")
+    public String generateLuckyNumbers(@RequestParam int count) {
+        return lottoService.generateLuckyNumbersForString(count);
+    }
+
 }
