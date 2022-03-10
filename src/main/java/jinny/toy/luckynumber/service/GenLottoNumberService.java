@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @Service
 public class GenLottoNumberService {
@@ -55,7 +56,14 @@ public class GenLottoNumberService {
             results.add(list.get(randomArr[i]).getNumber());
         }
         return results;
+    }
 
+    public static int[] genRandomNumbers(int count) {
+        int[] numbers = IntStream.generate(() -> new Random().nextInt(46))
+                .limit(count)
+                .sorted()
+                .toArray();
+        return numbers;
     }
 
 

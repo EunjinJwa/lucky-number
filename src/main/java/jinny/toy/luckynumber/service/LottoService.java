@@ -80,6 +80,15 @@ public class LottoService {
         lottoMemoryData.setNumberCounts(numberCounts);
     }
 
+    public String generateLuckyNumbersForString(int count) {
+        List<List<Integer>> numbers = generateLuckyNumbers(count);
+        StringBuffer sb = new StringBuffer();
+        for (List<Integer> n : numbers) {
+            sb.append(n + "\n");
+        }
+        return sb.toString();
+    }
+
     public List<List<Integer>> generateLuckyNumbers(int count) {
         List results = new ArrayList();
         int i = 1;
@@ -90,12 +99,4 @@ public class LottoService {
         return results;
     }
 
-    public String generateLuckyNumbersForString(int count) {
-        List<List<Integer>> numbers = generateLuckyNumbers(count);
-        StringBuffer sb = new StringBuffer();
-        for (List<Integer> n : numbers) {
-            sb.append(n + "\n");
-        }
-        return sb.toString();
-    }
 }

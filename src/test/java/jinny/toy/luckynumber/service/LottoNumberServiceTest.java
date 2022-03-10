@@ -46,17 +46,6 @@ public class LottoNumberServiceTest {
     }
 
     @Test
-    @DisplayName("무작위 랜덤 숫자 6개")
-    public void randomNumber() {
-        int[] numbers = LottoNumberService.genRandomNumbers();
-        Supplier<Boolean> numberRange = () -> IntStream.of(numbers).anyMatch(i -> i < 0 || i > 46);
-        Supplier<Long> numberCount = () -> IntStream.of(numbers).distinct().count();
-
-        Assertions.assertThat(numberRange.get()).isFalse();
-        Assertions.assertThat(numberCount.get()).isEqualTo(6);
-    }
-
-    @Test
     @DisplayName("가장 많이 당첨된 숫자 10개")
     public void getMaxLuckNumbers() {
         int[] topNumbers = lottoMemoryData.getNumberCounts()

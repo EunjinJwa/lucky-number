@@ -4,14 +4,18 @@ import jinny.toy.luckynumber.data.LottoMemoryData;
 import jinny.toy.luckynumber.rest.LotteryRest;
 import jinny.toy.luckynumber.struct.model.LottoNumber;
 import jinny.toy.luckynumber.struct.model.NumberCount;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -58,6 +62,18 @@ class genLottoNumberServiceTest {
             System.out.printf("(%d) -> %s%n", count, numbers);
             count++;
         }
+    }
+
+
+    @Test
+    @DisplayName("무작위 랜덤 숫자 6개")
+    public void randomNumber() {
+        int[] numbers = genLottoNumberService.genRandomNumbers(6);
+        Supplier<Boolean> numberRange = () -> IntStream.of(numbers).anyMatch(i -> i < 0 || i > 46);
+        Supplier<Long> numberCount = () -> IntStream.of(numbers).distinct().count();
+
+        Assertions.assertThat(numberRange.get()).isFalse();
+        Assertions.assertThat(numberCount.get()).isEqualTo(6);
     }
 
 }
